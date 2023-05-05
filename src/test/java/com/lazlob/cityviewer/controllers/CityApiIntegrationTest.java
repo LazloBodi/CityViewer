@@ -86,11 +86,11 @@ public class CityApiIntegrationTest {
     @Test
     void getCitiesPaginatedShouldReturnFirstPageWithSize5WhenDefined() throws Exception {
         cityRepository.saveAll(List.of(
-                new City(1L, "Budapest", "budapest.jpg"),
-                new City(2L, "Berlin", "berlin.jpg"),
                 new City(3L, "London", "london.jpg"),
                 new City(4L, "Paris", "paris.jpg"),
                 new City(5L, "Rome", "rome.jpg"),
+                new City(1L, "Budapest", "budapest.jpg"),
+                new City(2L, "Berlin", "berlin.jpg"),
                 new City(6L, "Madrid", "madrid.jpg")
         ));
 
@@ -104,8 +104,32 @@ public class CityApiIntegrationTest {
 
         CitiesPaginatedResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CitiesPaginatedResponse.class);
         assertEquals(5, response.getCities().size());
-        assertTrue(response.getCities().contains(new City(5L, "Rome", "rome.jpg")));
-        assertFalse(response.getCities().contains(new City(6L, "Madrid", "madrid.jpg")));
+        assertEquals(1L, response.getCities().get(0).getId());
+        assertEquals(5L, response.getCities().get(4).getId());
+    }
+
+    @Test
+    void getCitiesPaginatedShouldReturnPageWhenNameSearchIsDefined() throws Exception {
+        cityRepository.saveAll(List.of(
+                new City(1L, "Budapest", "budapest.jpg"),
+                new City(2L, "Berlin", "berlin.jpg"),
+                new City(3L, "London", "london.jpg"),
+                new City(4L, "Paris", "paris.jpg"),
+                new City(5L, "Rome", "rome.jpg"),
+                new City(6L, "Madrid", "madrid.jpg")
+        ));
+
+        MvcResult result = mockMvc.perform(get("/api/v1/city?page=0&size=5&nameSearch=Bud").contentType("application/json"))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType("application/json"))
+                .andExpect(jsonPath("$.page", is(0)))
+                .andExpect(jsonPath("$.size", is(5)))
+                .andExpect(jsonPath("$.totalCount", is(1)))
+                .andReturn();
+
+        CitiesPaginatedResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CitiesPaginatedResponse.class);
+        assertEquals(1, response.getCities().size());
+        assertEquals("Budapest", response.getCities().get(0).getName());
     }
 
     @Test

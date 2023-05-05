@@ -8,9 +8,11 @@ import com.lazlob.cityviewer.models.entities.City;
 import com.lazlob.cityviewer.repositories.CityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
-import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -28,17 +30,18 @@ public class CityService {
     }
 
     public CitiesPaginatedResponse getAllCitiesPaginated(Integer page, Integer size, String nameSearch) {
-        List<City> cities = StreamSupport.stream(cityRepository.findAll().spliterator(), false)
-                .sorted(Comparator.comparingLong(City::getId))
-                .filter(city -> city.getName().toLowerCase().contains(nameSearch.trim().toLowerCase()))
-                .skip((long) page * size)
-                .limit(size)
-                .toList();
+        List<City> cities;
+        long totalCount;
+        if (StringUtils.isNotBlank(nameSearch.trim())) {
+            cities = cityRepository.findAllByNameContainingIgnoreCase(nameSearch.trim(), PageRequest.of(page, size, Sort.by("id")));
+            totalCount = cities.size();
+        } else {
+            cities = StreamSupport.stream(cityRepository.findAll(PageRequest.of(page, size, Sort.by("id"))).spliterator(), false).toList();
+            totalCount = cityRepository.count();
+        }
+
         return CitiesPaginatedResponse.builder()
-                .page(page)
-                .size(size)
-                .totalCount(cityRepository.count())
-                .cities(cities)
+                .page(page).size(size).totalCount(totalCount).cities(cities)
                 .build();
     }
 
