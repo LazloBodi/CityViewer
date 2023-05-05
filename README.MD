@@ -2,8 +2,8 @@
 
 ## Description
 This is a simple application that allows you to view and edit the list of cities.
-The back-emd is written in Java 17 using the SpringBoot framework.
-The front-end is written in Angular.
+The back-emd is written in Java 17 using the SpringBoot 3 framework.
+The front-end is written in Angular 15.
 The application uses the H2 database, which is stored in memory.
 
 ## Installation
@@ -26,5 +26,6 @@ It will start on port `4200`.
 
 If all set open `http://localhost:4200/` in your browser.
 
-## Docs:
-Swagger is available at: `http://localhost:9876/swagger-ui/index.html`
+## Tools:
+- Swagger is available at: `http://localhost:9876/swagger-ui/index.html`
+- H2 viewer is available at: `http://localhost:9876/h2-console`
