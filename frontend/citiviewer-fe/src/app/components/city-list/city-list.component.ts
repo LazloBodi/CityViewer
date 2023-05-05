@@ -9,7 +9,7 @@ import { CityService } from 'src/app/services/city.service';
 })
 export class CityListComponent implements OnInit {
   cities: City[] = [];
-  page: number = 0;
+  page: number = 1;
   size: number = 20;
   totalCount: number = 0;
 
@@ -21,10 +21,19 @@ export class CityListComponent implements OnInit {
 
   loadCities() {
     this.cityService
-      .getCityPage(this.page, this.size)
+      .getCityPage(this.page - 1, this.size)
       .subscribe((page: CityPageResponse) => {
         this.cities = page.cities;
-        this.totalCount = page.totalPages * this.size;
+        this.totalCount = page.totalCount;
       });
+  }
+
+  onPageChange(page: number) {
+    console.log(page);
+    if (this.page === page) {
+      return;
+    }
+    this.page = page;
+    this.loadCities();
   }
 }

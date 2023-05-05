@@ -34,7 +34,7 @@ public class CityService {
         return CitiesPaginatedResponse.builder()
                 .page(page)
                 .size(size)
-                .totalPages((int) Math.ceil((double) cityRepository.count() / size))
+                .totalCount(cityRepository.count())
                 .cities(cities)
                 .build();
     }

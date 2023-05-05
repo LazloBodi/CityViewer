@@ -15,6 +15,6 @@ import java.util.List;
 public class CitiesPaginatedResponse {
     private Integer page;
     private Integer size;
-    private Integer totalPages;
+    private Long totalCount;
     private List<City> cities;
 }

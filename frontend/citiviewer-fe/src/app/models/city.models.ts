@@ -8,5 +8,5 @@ export class CityPageResponse {
     cities!: City[];
     page!: number;
     size!: number;
-    totalPages!: number;
+    totalCount!: number;
 }

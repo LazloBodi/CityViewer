@@ -77,6 +77,7 @@ public class CityApiIntegrationTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.page", is(0)))
                 .andExpect(jsonPath("$.size", is(100)))
+                .andExpect(jsonPath("$.totalCount", is(1)))
                 .andExpect(jsonPath("$.cities[0].id", is(testCity.getId().intValue())))
                 .andExpect(jsonPath("$.cities[0].name", is(testCity.getName())))
                 .andExpect(jsonPath("$.cities[0].photo", is(testCity.getPhoto())));
@@ -98,6 +99,7 @@ public class CityApiIntegrationTest {
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.page", is(0)))
                 .andExpect(jsonPath("$.size", is(5)))
+                .andExpect(jsonPath("$.totalCount", is(6)))
                 .andReturn();
 
         CitiesPaginatedResponse response = objectMapper.readValue(result.getResponse().getContentAsString(), CitiesPaginatedResponse.class);

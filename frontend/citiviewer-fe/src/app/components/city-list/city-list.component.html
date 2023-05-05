@@ -1,13 +1,14 @@
-<table>
+<table class="table table-striped">
   <thead>
-    <tr>
+    <tr class="table-info">
       <th>Id</th>
       <th>Name</th>
       <th>Photo</th>
+      <th>Actions</th>
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let city of cities">
+    <tr *ngFor="let city of cities" class="align-middle">
       <td>{{ city.id }}</td>
       <td>{{ city.name }}</td>
       <td>
@@ -18,12 +19,25 @@
           height="100"
         />
       </td>
+      <td>
+        <a
+          type="button"
+          class="btn btn-outline-warning"
+          [href]="'/city/' + city.id"
+        >
+          <i class="bi bi-pencil big"></i>
+        </a>
+      </td>
     </tr>
   </tbody>
 </table>
-
-<ngb-pagination
-  [(page)]="page"
-  [pageSize]="size"
-  [collectionSize]="totalCount"
-></ngb-pagination>
+<div class="d-flex justify-content-center">
+  <ngb-pagination
+    [page]="page"
+    (pageChange)="onPageChange($event)"
+    [pageSize]="size"
+    [collectionSize]="totalCount"
+    [boundaryLinks]="true"
+    [maxSize]="7"
+  ></ngb-pagination>
+</div>
