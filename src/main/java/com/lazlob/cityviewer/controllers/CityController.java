@@ -22,7 +22,7 @@ public class CityController {
     CityService cityService;
 
     @GetMapping("/{id}")
-    public City getCity(@PathVariable("id") Long id) {
+    public City getCityById(@PathVariable("id") Long id) {
         return cityService.getCityById(id);
     }
 
@@ -34,7 +34,7 @@ public class CityController {
     }
 
     @PutMapping("/{id}")
-    public City updateCity(
+    public City updateCityById(
             @PathVariable("id") Long id,
             @RequestBody @Valid CityUpdateRequest cityUpdateRequest) {
         return cityService.updateCity(id, cityUpdateRequest);

@@ -18,9 +18,8 @@ import java.util.stream.StreamSupport;
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
 public class CityService {
 
-    private static final ObjectMapper OBJECT_MAPPER = new ObjectMapper();
-
     CityRepository cityRepository;
+    ObjectMapper objectMapper;
 
     public City getCityById(Long id) {
         return cityRepository.findById(id)
@@ -41,7 +40,7 @@ public class CityService {
     }
 
     public City updateCity(Long id, CityUpdateRequest cityUpdateRequest) {
-        City city = OBJECT_MAPPER.convertValue(cityUpdateRequest, City.class);
+        City city = objectMapper.convertValue(cityUpdateRequest, City.class);
         city.setId(id);
         if (!cityRepository.existsById(city.getId())) {
             throw new NotFoundException("City not found with id: " + city.getId());
