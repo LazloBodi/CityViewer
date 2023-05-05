@@ -47,4 +47,8 @@ export class CityListComponent implements OnInit {
     this.loadCities();
   }
 
+  onNameSearch() {
+    this.page = 1;
+    this.loadCities();
+  }
 }

@@ -7,7 +7,7 @@ import { HttpClient } from '@angular/common/http';
   providedIn: 'root',
 })
 export class CityService {
-  private cityApiUrl = 'http://localhost:9876/api/v1/city';
+  readonly cityApiUrl = 'http://localhost:9876/api/v1/city';
 
   constructor(private http: HttpClient) {}
 
