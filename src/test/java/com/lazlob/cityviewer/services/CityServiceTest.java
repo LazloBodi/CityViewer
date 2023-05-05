@@ -108,13 +108,13 @@ public class CityServiceTest {
         assertEquals(5, pageResponse2.getSize());
         assertEquals(cities.size(), pageResponse2.getTotalCount());
 
-        assertEquals(0,  pageCaptor.getAllValues().get(0).getPageNumber());
+        assertEquals(0, pageCaptor.getAllValues().get(0).getPageNumber());
         assertEquals(5, pageCaptor.getAllValues().get(0).getPageSize());
-        assertEquals(Sort.by("id"),  pageCaptor.getAllValues().get(0).getSort());
+        assertEquals(Sort.by("id"), pageCaptor.getAllValues().get(0).getSort());
 
-        assertEquals(1,  pageCaptor.getAllValues().get(1).getPageNumber());
+        assertEquals(1, pageCaptor.getAllValues().get(1).getPageNumber());
         assertEquals(5, pageCaptor.getAllValues().get(1).getPageSize());
-        assertEquals(Sort.by("id"),  pageCaptor.getAllValues().get(1).getSort());
+        assertEquals(Sort.by("id"), pageCaptor.getAllValues().get(1).getSort());
     }
 
     @Test
@@ -136,6 +136,8 @@ public class CityServiceTest {
         );
         when(cityRepository.findAllByNameContainingIgnoreCase(eq(nameSearch), pageCaptor.capture()))
                 .thenReturn(expectedCities);
+        when(cityRepository.countByNameContainingIgnoreCase(eq(nameSearch)))
+                .thenReturn((long) expectedCities.size());
 
         CitiesPaginatedResponse searchPage = cityService.getAllCitiesPaginated(0, 5, nameSearch);
 

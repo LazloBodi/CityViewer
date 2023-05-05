@@ -34,7 +34,7 @@ public class CityService {
         long totalCount;
         if (StringUtils.isNotBlank(nameSearch.trim())) {
             cities = cityRepository.findAllByNameContainingIgnoreCase(nameSearch.trim(), PageRequest.of(page, size, Sort.by("id")));
-            totalCount = cities.size();
+            totalCount = cityRepository.countByNameContainingIgnoreCase(nameSearch.trim());
         } else {
             cities = StreamSupport.stream(cityRepository.findAll(PageRequest.of(page, size, Sort.by("id"))).spliterator(), false).toList();
             totalCount = cityRepository.count();
