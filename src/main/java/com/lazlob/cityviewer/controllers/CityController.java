@@ -29,8 +29,9 @@ public class CityController {
     @GetMapping()
     public CitiesPaginatedResponse getCitiesPaginated(
             @RequestParam(value = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
-            @RequestParam(value = "size", defaultValue = "100", required = false) @Positive Integer size) {
-        return cityService.getAllCitiesPaginated(page, size);
+            @RequestParam(value = "size", defaultValue = "100", required = false) @Positive Integer size,
+            @RequestParam(value = "nameSearch", defaultValue ="", required = false) String nameSearch) {
+        return cityService.getAllCitiesPaginated(page, size, nameSearch);
     }
 
     @PutMapping("/{id}")

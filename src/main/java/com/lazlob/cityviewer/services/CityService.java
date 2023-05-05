@@ -26,8 +26,9 @@ public class CityService {
                 .orElseThrow(() -> new NotFoundException("City not found with id: " + id));
     }
 
-    public CitiesPaginatedResponse getAllCitiesPaginated(Integer page, Integer size) {
+    public CitiesPaginatedResponse getAllCitiesPaginated(Integer page, Integer size, String nameSearch) {
         List<City> cities = StreamSupport.stream(cityRepository.findAll().spliterator(), false)
+                .filter(city -> city.getName().toLowerCase().contains(nameSearch.trim().toLowerCase()))
                 .skip((long) page * size)
                 .limit(size)
                 .toList();

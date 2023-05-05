@@ -13,6 +13,7 @@ export class CityListComponent implements OnInit {
   size: number = 20;
   totalCount: number = 0;
   pageSizes: number[] = [10, 20, 50];
+  nameSearch: string = '';
 
   constructor(private cityService: CityService) {}
 
@@ -22,7 +23,7 @@ export class CityListComponent implements OnInit {
 
   loadCities() {
     this.cityService
-      .getCityPage(this.page - 1, this.size)
+      .getCityPage(this.page - 1, this.size, this.nameSearch)
       .subscribe((page: CityPageResponse) => {
         this.cities = page.cities;
         this.totalCount = page.totalCount;

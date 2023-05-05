@@ -15,9 +15,9 @@ export class CityService {
     return this.http.get<City>(`${this.cityApiUrl}/${id}`);
   }
 
-  public getCityPage(page: number, size: number): Observable<CityPageResponse> {
+  public getCityPage(page: number, size: number, nameSearch: string): Observable<CityPageResponse> {
     return this.http.get<CityPageResponse>(
-      `${this.cityApiUrl}?page=${page}&size=${size}`
+      `${this.cityApiUrl}?page=${page}&size=${size}&nameSearch=${nameSearch}`
     );
   }
 

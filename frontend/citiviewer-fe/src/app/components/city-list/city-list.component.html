@@ -1,3 +1,16 @@
+<div class="d-flex justify-content-end">
+  <div class="row g-3 mb-3 align-items-center">
+  <div class="col-auto">
+    <label for="nameSearch" class="col-form-label">Filter by name:</label>
+  </div>
+  <div class="col-auto">
+    <input [(ngModel)]="nameSearch" type="text" id="nameSearch" class="form-control" aria-describedby="nameSearch">
+  </div>
+  <div class="col-auto">
+    <button type="button" class="btn btn-primary" (click)="loadCities()">Go</button>
+  </div>
+</div>
+</div>
 <table class="table table-striped">
   <thead>
     <tr class="table-info">
