@@ -12,6 +12,7 @@ export class CityListComponent implements OnInit {
   page: number = 1;
   size: number = 20;
   totalCount: number = 0;
+  pageSizes: number[] = [10, 20, 50];
 
   constructor(private cityService: CityService) {}
 
@@ -29,11 +30,20 @@ export class CityListComponent implements OnInit {
   }
 
   onPageChange(page: number) {
-    console.log(page);
     if (this.page === page) {
       return;
     }
     this.page = page;
     this.loadCities();
   }
+
+  onPageSizeChange(size: number) {
+    if (this.size === size) {
+      return;
+    }
+    this.size = size;
+    this.page = 1;
+    this.loadCities();
+  }
+
 }

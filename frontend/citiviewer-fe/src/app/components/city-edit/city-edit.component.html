@@ -1,13 +1,13 @@
 <div *ngIf="cityForm" class="d-flex justify-content-center">
   <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="col-10">
     <div class="mb-3 row">
-      <label for="cityId" class="form-label col-2"> Id: </label>
+      <label for="cityId" class="form-label col-2 col-form-label"> Id: </label>
       <div class="col-10">
         <input class="form-control" id="cityId" formControlName="id" readonly />
       </div>
     </div>
     <div class="mb-3 row">
-      <label for="name" class="form-label col-2"> Name: </label>
+      <label for="name" class="form-label col-2 col-form-label"> Name: </label>
       <div class="col-10">
         <input
           class="form-control"
@@ -28,7 +28,7 @@
       </div>
     </div>
     <div class="mb-3 row">
-      <label for="photo" class="form-label col-2"> Photo Url: </label>
+      <label for="photo" class="form-label col-2 col-form-label"> Photo Url: </label>
       <div class="col-10">
         <input
           class="form-control"
