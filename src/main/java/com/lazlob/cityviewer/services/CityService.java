@@ -10,6 +10,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.stereotype.Service;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.StreamSupport;
 
@@ -28,6 +29,7 @@ public class CityService {
 
     public CitiesPaginatedResponse getAllCitiesPaginated(Integer page, Integer size, String nameSearch) {
         List<City> cities = StreamSupport.stream(cityRepository.findAll().spliterator(), false)
+                .sorted(Comparator.comparingLong(City::getId))
                 .filter(city -> city.getName().toLowerCase().contains(nameSearch.trim().toLowerCase()))
                 .skip((long) page * size)
                 .limit(size)
