@@ -3,6 +3,7 @@ package com.lazlob.cityviewer.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lazlob.cityviewer.exceptions.NotFoundException;
 import com.lazlob.cityviewer.models.dtos.CitiesPaginatedResponse;
+import com.lazlob.cityviewer.models.dtos.CityResponse;
 import com.lazlob.cityviewer.models.dtos.CityUpdateRequest;
 import com.lazlob.cityviewer.models.entities.City;
 import com.lazlob.cityviewer.repositories.CityRepository;
@@ -10,7 +11,10 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.*;
 import org.mockito.junit.jupiter.MockitoExtension;
-import org.springframework.data.domain.*;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 
 import java.util.List;
 import java.util.Optional;
@@ -52,7 +56,7 @@ public class CityServiceTest {
         when(cityRepository.findById(cityInDb.getId()))
                 .thenReturn(Optional.of(cityInDb));
 
-        City city = cityService.getCityById(cityInDb.getId());
+        CityResponse city = cityService.getCityById(cityInDb.getId());
 
         assertEquals(cityInDb.getName(), city.getName());
     }
@@ -142,7 +146,10 @@ public class CityServiceTest {
         CitiesPaginatedResponse searchPage = cityService.getAllCitiesPaginated(0, 5, nameSearch);
 
         assertEquals(expectedCities.size(), searchPage.getCities().size());
-        assertEquals(expectedCities, searchPage.getCities());
+        assertEquals(searchPage.getCities().get(0).getClass(), CityResponse.class);
+        assertEquals(searchPage.getCities().get(0).getId(), expectedCities.get(0).getId());
+        assertEquals(searchPage.getCities().get(0).getName(), expectedCities.get(0).getName());
+        assertEquals(searchPage.getCities().get(0).getPhoto(), expectedCities.get(0).getPhoto());
         assertEquals(0, searchPage.getPage());
         assertEquals(5, searchPage.getSize());
         assertEquals(expectedCities.size(), searchPage.getTotalCount());
@@ -167,7 +174,7 @@ public class CityServiceTest {
         cityUpdateRequest.setName("Berlin");
         cityUpdateRequest.setPhoto("berlin.jpg");
 
-        City returned = cityService.updateCity(cityId, cityUpdateRequest);
+        CityResponse returned = cityService.updateCity(cityId, cityUpdateRequest);
 
         assertEquals(cityId, returned.getId());
         assertEquals("saved", returned.getName());

@@ -3,6 +3,7 @@ package com.lazlob.cityviewer.services;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lazlob.cityviewer.exceptions.NotFoundException;
 import com.lazlob.cityviewer.models.dtos.CitiesPaginatedResponse;
+import com.lazlob.cityviewer.models.dtos.CityResponse;
 import com.lazlob.cityviewer.models.dtos.CityUpdateRequest;
 import com.lazlob.cityviewer.models.entities.City;
 import com.lazlob.cityviewer.repositories.CityRepository;
@@ -24,8 +25,9 @@ public class CityService {
     CityRepository cityRepository;
     ObjectMapper objectMapper;
 
-    public City getCityById(Long id) {
+    public CityResponse getCityById(Long id) {
         return cityRepository.findById(id)
+                .map(c -> objectMapper.convertValue(c, CityResponse.class))
                 .orElseThrow(() -> new NotFoundException("City not found with id: " + id));
     }
 
@@ -41,16 +43,18 @@ public class CityService {
         }
 
         return CitiesPaginatedResponse.builder()
-                .page(page).size(size).totalCount(totalCount).cities(cities)
+                .page(page).size(size).totalCount(totalCount)
+                .cities(cities.stream().map(c -> objectMapper.convertValue(c, CityResponse.class)).toList())
                 .build();
     }
 
-    public City updateCity(Long id, CityUpdateRequest cityUpdateRequest) {
+    public CityResponse updateCity(Long id, CityUpdateRequest cityUpdateRequest) {
         City city = objectMapper.convertValue(cityUpdateRequest, City.class);
         city.setId(id);
         if (!cityRepository.existsById(city.getId())) {
             throw new NotFoundException("City not found with id: " + city.getId());
         }
-        return cityRepository.save(city);
+        City savedCity = cityRepository.save(city);
+        return objectMapper.convertValue(savedCity, CityResponse.class);
     }
 }

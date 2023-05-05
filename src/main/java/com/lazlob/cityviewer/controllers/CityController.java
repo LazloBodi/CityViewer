@@ -1,8 +1,8 @@
 package com.lazlob.cityviewer.controllers;
 
 import com.lazlob.cityviewer.models.dtos.CitiesPaginatedResponse;
+import com.lazlob.cityviewer.models.dtos.CityResponse;
 import com.lazlob.cityviewer.models.dtos.CityUpdateRequest;
-import com.lazlob.cityviewer.models.entities.City;
 import com.lazlob.cityviewer.services.CityService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
@@ -28,7 +28,7 @@ public class CityController {
     @ApiResponse(responseCode = "200", description = "City retired successfully")
     @ApiResponse(responseCode = "404", description = "City not found")
     @GetMapping("/{id}")
-    public City getCityById(@PathVariable("id") Long id) {
+    public CityResponse getCityById(@PathVariable("id") Long id) {
         return cityService.getCityById(id);
     }
 
@@ -48,7 +48,7 @@ public class CityController {
     @ApiResponse(responseCode = "400", description = "City update request body is invalid")
     @ApiResponse(responseCode = "404", description = "City not found")
     @PutMapping("/{id}")
-    public City updateCityById(
+    public CityResponse updateCityById(
             @PathVariable("id") Long id,
             @RequestBody @Valid CityUpdateRequest cityUpdateRequest) {
         return cityService.updateCity(id, cityUpdateRequest);
