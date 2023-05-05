@@ -6,9 +6,8 @@ import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { City, CityPageResponse } from 'src/app/models/city.models';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
-import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-fdescribe('CityListComponent', () => {
+describe('CityListComponent', () => {
   let component: CityListComponent;
   let fixture: ComponentFixture<CityListComponent>;
   let cityServiceMock: jasmine.SpyObj<CityService>;
