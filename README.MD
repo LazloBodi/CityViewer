@@ -29,3 +29,8 @@ If all set open `http://localhost:4200/` in your browser.
 ## Tools:
 - Swagger is available at: `http://localhost:9876/swagger-ui/index.html`
 - H2 viewer is available at: `http://localhost:9876/h2-console`
+
+## Test credentials
+- username: admin, password: 1234
+- username: user, password: 1234
+
