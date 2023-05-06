@@ -1,4 +1,4 @@
-package com.lazlob.cityviewer.services;
+package com.lazlob.cityviewer.services.auth;
 
 import com.lazlob.cityviewer.models.entities.Account;
 import io.jsonwebtoken.Claims;
@@ -48,9 +48,12 @@ public class JwtTokenService {
                 .compact();
     }
 
-    public Boolean validateToken(String token, Account account) {
-        final String username = getClaimFromToken(token, Claims::getSubject);
-        return (username.equals(account.getUsername()) && !isTokenExpired(token));
+    public String getUsernameFromToken(String token) {
+        return getClaimFromToken(token, Claims::getSubject);
+    }
+
+    public Boolean validateToken(String token) {
+        return !isTokenExpired(token);
     }
 
     private Boolean isTokenExpired(String token) {

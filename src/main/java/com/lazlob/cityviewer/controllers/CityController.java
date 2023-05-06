@@ -5,6 +5,8 @@ import com.lazlob.cityviewer.models.dtos.CityResponse;
 import com.lazlob.cityviewer.models.dtos.CityUpdateRequest;
 import com.lazlob.cityviewer.services.CityService;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.enums.ParameterIn;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.Pattern;
@@ -12,6 +14,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
+import org.springframework.http.HttpHeaders;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -26,7 +29,9 @@ public class CityController {
 
     @Operation(summary = "Get a city by id.")
     @ApiResponse(responseCode = "200", description = "City retired successfully")
+    @ApiResponse(responseCode = "401", description = "Unauthorized - Please login first")
     @ApiResponse(responseCode = "404", description = "City not found")
+    @Parameter(name = HttpHeaders.AUTHORIZATION, example = "Bearer {token}", in = ParameterIn.HEADER, required = true)
     @GetMapping("/{id}")
     public CityResponse getCityById(@PathVariable("id") Long id) {
         return cityService.getCityById(id);
@@ -35,6 +40,8 @@ public class CityController {
     @Operation(summary = "Get all cities paginated, and optionally filtered by name.")
     @ApiResponse(responseCode = "200", description = "Cities retrieved successfully")
     @ApiResponse(responseCode = "400", description = "Page, size or nameSearch params are invalid")
+    @ApiResponse(responseCode = "401", description = "Unauthorized - Please login first")
+    @Parameter(name = HttpHeaders.AUTHORIZATION, example = "Bearer {token}", in = ParameterIn.HEADER, required = true)
     @GetMapping()
     public CitiesPaginatedResponse getCitiesPaginated(
             @RequestParam(value = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
@@ -46,7 +53,9 @@ public class CityController {
     @Operation(summary = "Update a city if exists.")
     @ApiResponse(responseCode = "200", description = "City updated successfully")
     @ApiResponse(responseCode = "400", description = "City update request body is invalid")
+    @ApiResponse(responseCode = "401", description = "Unauthorized - Please login first")
     @ApiResponse(responseCode = "404", description = "City not found")
+    @Parameter(name = HttpHeaders.AUTHORIZATION, example = "Bearer {token}", in = ParameterIn.HEADER, required = true)
     @PutMapping("/{id}")
     public CityResponse updateCityById(
             @PathVariable("id") Long id,
