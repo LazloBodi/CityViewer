@@ -12,9 +12,9 @@ export class AuthService {
 
   constructor(private http: HttpClient) {}
 
-  public login(username: string, password: string): Observable<boolean> {
+  public login(credentials: Credentials): Observable<boolean> {
     return this.http
-      .post<TokenResponse>(this.loginUrl, { username, password } as Credentials)
+      .post<TokenResponse>(this.loginUrl, credentials)
       .pipe(
         map((response: TokenResponse) => {
           localStorage.setItem('token', response.token);

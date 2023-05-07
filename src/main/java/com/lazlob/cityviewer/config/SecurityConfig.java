@@ -13,6 +13,10 @@ import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.HttpStatusEntryPoint;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
+import java.util.Arrays;
 
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
@@ -38,9 +42,28 @@ public class SecurityConfig {
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class)
                 .userDetailsService(authService)
-                .cors().disable()
                 .csrf().disable()
                 .headers(customizer -> customizer.frameOptions().sameOrigin())
                 .build();
     }
+
+    @Bean
+    public WebMvcConfigurer corsConfig() {
+        return new WebMvcConfigurer() {
+            @Override
+            public void addCorsMappings(CorsRegistry registry) {
+                registry.addMapping("/api/**")
+                        .allowedOrigins("http://localhost:4200")
+                        .allowedMethods(Arrays.stream(HttpMethod.values())
+                                .map(HttpMethod::name)
+                                .toArray(String[]::new));
+                registry.addMapping("/login")
+                        .allowedOrigins("http://localhost:4200")
+                        .allowedMethods(
+                                HttpMethod.OPTIONS.name(),
+                                HttpMethod.POST.name());
+            }
+        };
+    }
+
 }

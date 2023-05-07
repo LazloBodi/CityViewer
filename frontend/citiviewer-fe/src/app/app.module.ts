@@ -8,12 +8,14 @@ import { AppComponent } from './app.component';
 import { CityListComponent } from './components/city-list/city-list.component';
 import { CityEditComponent } from './components/city-edit/city-edit.component';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { LoginComponent } from './components/login/login.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     CityListComponent,
-    CityEditComponent
+    CityEditComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
