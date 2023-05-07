@@ -16,13 +16,13 @@ export class LoginComponent implements OnInit {
   credentials: Credentials = { username: '', password: '' };
 
   constructor(
-    private authSerice: AuthService,
+    private authService: AuthService,
     private formBuilder: FormBuilder,
     private router: Router
   ) {}
 
   ngOnInit(): void {
-    if (this.authSerice.isLoggedIn()) {
+    if (this.authService.isLoggedIn()) {
       this.router.navigate(['']);
     }
     this.loginForm = this.formBuilder.group({
@@ -35,7 +35,7 @@ export class LoginComponent implements OnInit {
   onLogin() {
     this.loading = true;
     console.log(this.loginForm.value);
-    this.authSerice.login(this.loginForm.value).subscribe({
+    this.authService.login(this.loginForm.value).subscribe({
       next: () => {
         this.loading = false;
         this.loginError = false;

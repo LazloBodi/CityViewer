@@ -1,8 +1,9 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable, map, of } from 'rxjs';
+import { BehaviorSubject, Observable, map, of } from 'rxjs';
 import { Credentials, TokenResponse } from '../models/auth.models';
 import jwt_decode from 'jwt-decode';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -10,15 +11,19 @@ import jwt_decode from 'jwt-decode';
 export class AuthService {
   readonly loginUrl = 'http://localhost:9876/login';
 
-  constructor(private http: HttpClient) {}
+  public loggedIn = new BehaviorSubject<boolean>(false);
 
-  public login(credentials: Credentials): Observable<boolean> {
+  constructor(private http: HttpClient, private router: Router) {
+    this.loggedIn.next(this.isLoggedIn());
+  }
+
+  public login(credentials: Credentials): Observable<void> {
     return this.http.post<TokenResponse>(this.loginUrl, credentials).pipe(
       map((response: TokenResponse) => {
         localStorage.setItem('token', response.token);
         const roles = (jwt_decode(response.token) as any).roles;
         localStorage.setItem('roles', roles);
-        return true;
+        this.loggedIn.next(true);
       })
     );
   }
@@ -26,6 +31,8 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('roles');
+    this.loggedIn.next(false);
+    this.router.navigate(['/login']);
   }
 
   public isLoggedIn(): boolean {
