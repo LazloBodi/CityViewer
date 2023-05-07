@@ -8,7 +8,7 @@ import { Observable } from 'rxjs';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  loggedIn$: Observable<boolean> = this.authService.loggedIn;
+  loggedIn$: Observable<boolean> = this.authService.loggedIn$;
 
   constructor(private authService: AuthService) {}
 

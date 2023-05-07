@@ -6,11 +6,14 @@ import { of } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { City, CityPageResponse } from 'src/app/models/city.models';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { AuthService } from 'src/app/services/auth.service';
+import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 describe('CityListComponent', () => {
   let component: CityListComponent;
   let fixture: ComponentFixture<CityListComponent>;
   let cityServiceMock: jasmine.SpyObj<CityService>;
+  let authServiceMock: jasmine.SpyObj<AuthService>;
   const testCity1: City = { id: 1, name: 'Budapest', photo: 'budapest.jpg' };
   const testCity2: City = { id: 2, name: 'London', photo: 'london.jpg' };
   const testCityPageResponse: CityPageResponse = {
@@ -23,11 +26,17 @@ describe('CityListComponent', () => {
   beforeEach(async () => {
     cityServiceMock = jasmine.createSpyObj('CityService', ['getCityPage']);
     cityServiceMock.getCityPage.and.returnValue(of(testCityPageResponse));
+    authServiceMock = jasmine.createSpyObj('AuthService', ['hasRole']);
+    authServiceMock.hasRole.and.returnValue(true);
 
     await TestBed.configureTestingModule({
       imports: [FormsModule, NgbModule],
       declarations: [CityListComponent],
-      providers: [{ provide: CityService, useValue: cityServiceMock }],
+      providers: [
+        { provide: CityService, useValue: cityServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
     }).compileComponents();
 
     fixture = TestBed.createComponent(CityListComponent);

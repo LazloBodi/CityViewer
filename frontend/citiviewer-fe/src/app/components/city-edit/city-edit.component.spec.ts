@@ -5,11 +5,13 @@ import { CityService } from 'src/app/services/city.service';
 import { of } from 'rxjs';
 import { City } from 'src/app/models/city.models';
 import { ReactiveFormsModule } from '@angular/forms';
+import { AuthService } from 'src/app/services/auth.service';
 
 describe('CityEditComponent', () => {
   let component: CityEditComponent;
   let fixture: ComponentFixture<CityEditComponent>;
   let cityServiceMock: jasmine.SpyObj<CityService>;
+  let authServiceMock: jasmine.SpyObj<AuthService>;
   const testCity: City = { id: 1, name: 'Budapest', photo: 'budapest.jpg' };
 
   beforeEach(async () => {
@@ -19,10 +21,15 @@ describe('CityEditComponent', () => {
     ]);
     cityServiceMock.getCity.and.returnValue(of(testCity));
     cityServiceMock.updateCity.and.returnValue(of(testCity));
+    authServiceMock = jasmine.createSpyObj('AuthService', ['hasRole']);
+    authServiceMock.hasRole.and.returnValue(true);
 
     await TestBed.configureTestingModule({
       imports: [RouterTestingModule.withRoutes([]), ReactiveFormsModule],
-      providers: [{ provide: CityService, useValue: cityServiceMock }],
+      providers: [
+        { provide: CityService, useValue: cityServiceMock },
+        { provide: AuthService, useValue: authServiceMock },
+      ],
       declarations: [CityEditComponent],
     }).compileComponents();
 

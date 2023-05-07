@@ -11,10 +11,10 @@ import { Router } from '@angular/router';
 export class AuthService {
   readonly loginUrl = 'http://localhost:9876/login';
 
-  public loggedIn = new BehaviorSubject<boolean>(false);
+  public loggedIn$ = new BehaviorSubject<boolean>(false);
 
   constructor(private http: HttpClient, private router: Router) {
-    this.loggedIn.next(this.isLoggedIn());
+    this.loggedIn$.next(this.isLoggedIn());
   }
 
   public login(credentials: Credentials): Observable<void> {
@@ -23,7 +23,7 @@ export class AuthService {
         localStorage.setItem('token', response.token);
         const roles = (jwt_decode(response.token) as any).roles;
         localStorage.setItem('roles', roles);
-        this.loggedIn.next(true);
+        this.loggedIn$.next(true);
       })
     );
   }
@@ -31,7 +31,7 @@ export class AuthService {
   public logout(): void {
     localStorage.removeItem('token');
     localStorage.removeItem('roles');
-    this.loggedIn.next(false);
+    this.loggedIn$.next(false);
     this.router.navigate(['/login']);
   }
 
