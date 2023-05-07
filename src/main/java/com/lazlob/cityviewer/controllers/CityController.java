@@ -15,6 +15,7 @@ import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -57,6 +58,7 @@ public class CityController {
     @ApiResponse(responseCode = "404", description = "City not found")
     @Parameter(name = HttpHeaders.AUTHORIZATION, example = "Bearer {token}", in = ParameterIn.HEADER, required = true)
     @PutMapping("/{id}")
+    @PreAuthorize("hasAuthority('ROLE_ALLOW_EDIT')")
     public CityResponse updateCityById(
             @PathVariable("id") Long id,
             @RequestBody @Valid CityUpdateRequest cityUpdateRequest) {

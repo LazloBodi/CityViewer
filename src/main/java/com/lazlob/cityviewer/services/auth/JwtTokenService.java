@@ -15,7 +15,6 @@ import java.nio.charset.StandardCharsets;
 import java.time.Clock;
 import java.time.temporal.ChronoUnit;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
 
@@ -39,9 +38,9 @@ public class JwtTokenService {
     }
 
     public String generateToken(Account account) {
-        Map<String, Object> claims = new HashMap<>();
         return Jwts.builder()
-                .setClaims(claims).setSubject(account.getUsername())
+                .setSubject(account.getUsername())
+                .setClaims(Jwts.claims(Map.of("roles", account.getRoles())))
                 .setIssuedAt(new Date(clock.instant().toEpochMilli()))
                 .setExpiration(new Date(clock.instant().plus(jwtExpirationMinutes, ChronoUnit.MINUTES).toEpochMilli()))
                 .signWith(key)
