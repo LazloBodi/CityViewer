@@ -1,15 +1,28 @@
 <div class="d-flex justify-content-end">
   <div class="row g-3 mb-3 align-items-center">
-  <div class="col-auto">
-    <label for="nameSearch" class="col-form-label">Filter by name:</label>
+    <div class="col-auto">
+      <label for="nameSearch" class="col-form-label">Filter by name:</label>
+    </div>
+    <div class="col-auto">
+      <input
+        [(ngModel)]="nameSearch"
+        type="text"
+        id="nameSearch"
+        class="form-control"
+        aria-describedby="nameSearch"
+      />
+    </div>
+    <div class="col-auto">
+      <button
+        type="button"
+        class="btn btn-primary"
+        id="nameSearchButton"
+        (click)="onNameSearch()"
+      >
+        Go
+      </button>
+    </div>
   </div>
-  <div class="col-auto">
-    <input [(ngModel)]="nameSearch" type="text" id="nameSearch" class="form-control" aria-describedby="nameSearch">
-  </div>
-  <div class="col-auto">
-    <button type="button" class="btn btn-primary" id="nameSearchButton" (click)="onNameSearch()">Go</button>
-  </div>
-</div>
 </div>
 <table class="table table-striped">
   <thead>
@@ -36,7 +49,7 @@
         <a
           type="button"
           class="btn btn-outline-warning"
-          [href]="'/city/' + city.id"
+          [routerLink]="'/city/' + city.id"
           placement="end"
           ngbTooltip="Edit"
         >
@@ -58,7 +71,9 @@
 </div>
 
 <div class="d-flex justify-content-end mb-3">
-  <label class="form-label col-form-label col-1" for="pageSizeSelect">Page size</label>
+  <label class="form-label col-form-label col-1" for="pageSizeSelect"
+    >Page size</label
+  >
   <div class="col-1">
     <select
       class="form-select form-select-sm"
