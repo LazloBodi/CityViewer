@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { City, CityPageResponse } from 'src/app/models/city.models';
+import { AuthService } from 'src/app/services/auth.service';
 import { CityService } from 'src/app/services/city.service';
 
 @Component({
@@ -14,10 +15,15 @@ export class CityListComponent implements OnInit {
   totalCount: number = 0;
   pageSizes: number[] = [10, 20, 50];
   nameSearch: string = '';
+  canUserEdit: boolean = false;
 
-  constructor(private cityService: CityService) {}
+  constructor(
+    private cityService: CityService,
+    private authService: AuthService
+  ) {}
 
   ngOnInit(): void {
+    this.canUserEdit = this.authService.hasRole('ALLOW_EDIT');
     this.loadCities();
   }
 

@@ -47,6 +47,7 @@
       </td>
       <td>
         <a
+          *ngIf="canUserEdit"
           type="button"
           class="btn btn-outline-warning"
           [routerLink]="'/city/' + city.id"

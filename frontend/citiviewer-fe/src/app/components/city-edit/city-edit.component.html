@@ -28,7 +28,9 @@
       </div>
     </div>
     <div class="mb-3 row">
-      <label for="photo" class="form-label col-2 col-form-label"> Photo Url: </label>
+      <label for="photo" class="form-label col-2 col-form-label">
+        Photo Url:
+      </label>
       <div class="col-10">
         <input
           class="form-control"
@@ -49,11 +51,11 @@
       </div>
     </div>
     <div class="d-flex justify-content-end">
-        <button
+      <button
         class="btn btn-primary"
         type="submit"
         id="citySaveButton"
-        [disabled]="cityForm.invalid || loading"
+        [disabled]="cityForm.invalid || loading || !userCanEdit"
       >
         Save
       </button>
