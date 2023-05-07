@@ -13,16 +13,14 @@ export class AuthService {
   constructor(private http: HttpClient) {}
 
   public login(credentials: Credentials): Observable<boolean> {
-    return this.http
-      .post<TokenResponse>(this.loginUrl, credentials)
-      .pipe(
-        map((response: TokenResponse) => {
-          localStorage.setItem('token', response.token);
-          const roles = (jwt_decode(response.token) as any).roles;
-          localStorage.setItem('roles', roles);
-          return true;
-        })
-      );
+    return this.http.post<TokenResponse>(this.loginUrl, credentials).pipe(
+      map((response: TokenResponse) => {
+        localStorage.setItem('token', response.token);
+        const roles = (jwt_decode(response.token) as any).roles;
+        localStorage.setItem('roles', roles);
+        return true;
+      })
+    );
   }
 
   public logout(): void {
@@ -37,5 +35,9 @@ export class AuthService {
   public hasRole(role: string): boolean {
     const roles = localStorage.getItem('roles');
     return roles !== null && roles.split(',').includes(role);
+  }
+
+  public getToken(): string | null {
+    return localStorage.getItem('token');
   }
 }
