@@ -31,6 +31,6 @@ If all set open `http://localhost:4200/` in your browser.
 - H2 viewer is available at: `http://localhost:9876/h2-console`
 
 ## Test credentials
-- username: admin, password: 1234
+- username: admin, password: 1234 (admin has ROLE_ALLOW_EDIT)
 - username: user, password: 1234
 
