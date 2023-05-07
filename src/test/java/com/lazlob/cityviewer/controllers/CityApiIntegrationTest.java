@@ -3,8 +3,10 @@ package com.lazlob.cityviewer.controllers;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.lazlob.cityviewer.models.dtos.CitiesPaginatedResponse;
 import com.lazlob.cityviewer.models.dtos.CityUpdateRequest;
+import com.lazlob.cityviewer.models.entities.Account;
 import com.lazlob.cityviewer.models.entities.City;
 import com.lazlob.cityviewer.repositories.CityRepository;
+import com.lazlob.cityviewer.services.auth.JwtTokenService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +20,7 @@ import org.springframework.test.web.servlet.MvcResult;
 import java.util.List;
 
 import static org.hamcrest.Matchers.is;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
@@ -37,9 +39,15 @@ public class CityApiIntegrationTest {
     @Autowired
     private CityRepository cityRepository;
 
+    @Autowired
+    private JwtTokenService jwtTokenService;
+
+    private String adminAuthHeader;
+
     @BeforeEach
     public void init() {
         cityRepository.deleteAll();
+        adminAuthHeader = "Bearer " + jwtTokenService.generateToken(new Account("admin", "", ""));
     }
 
     @Test
@@ -47,7 +55,9 @@ public class CityApiIntegrationTest {
         City testCity = new City(1L, "Budapest", "budapest.jpg");
         cityRepository.save(testCity);
 
-        mockMvc.perform(get("/api/v1/city/" + testCity.getId()).contentType("application/json"))
+        mockMvc.perform(get("/api/v1/city/" + testCity.getId())
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.id", is(testCity.getId().intValue())))
@@ -57,13 +67,17 @@ public class CityApiIntegrationTest {
 
     @Test
     void getCityByIdShouldReturnNotFoundWhenCityNotExists() throws Exception {
-        mockMvc.perform(get("/api/v1/city/0").contentType("application/json"))
+        mockMvc.perform(get("/api/v1/city/0")
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isNotFound());
     }
 
     @Test
     void getCityByIdShouldReturnBadRequestWhenCitIdIsInvalid() throws Exception {
-        mockMvc.perform(get("/api/v1/city/bp").contentType("application/json"))
+        mockMvc.perform(get("/api/v1/city/bp")
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isBadRequest());
     }
 
@@ -72,7 +86,9 @@ public class CityApiIntegrationTest {
         City testCity = new City(1L, "Budapest", "budapest.jpg");
         cityRepository.save(testCity);
 
-        mockMvc.perform(get("/api/v1/city").contentType("application/json"))
+        mockMvc.perform(get("/api/v1/city")
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.page", is(0)))
@@ -94,7 +110,9 @@ public class CityApiIntegrationTest {
                 new City(6L, "Madrid", "madrid.jpg")
         ));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/city?page=0&size=5").contentType("application/json"))
+        MvcResult result = mockMvc.perform(get("/api/v1/city?page=0&size=5")
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.page", is(0)))
@@ -119,7 +137,9 @@ public class CityApiIntegrationTest {
                 new City(6L, "Madrid", "madrid.jpg")
         ));
 
-        MvcResult result = mockMvc.perform(get("/api/v1/city?page=0&size=5&nameSearch=Bud").contentType("application/json"))
+        MvcResult result = mockMvc.perform(get("/api/v1/city?page=0&size=5&nameSearch=Bud")
+                        .contentType("application/json")
+                        .header("Authorization", adminAuthHeader))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
                 .andExpect(jsonPath("$.page", is(0)))
@@ -140,6 +160,7 @@ public class CityApiIntegrationTest {
 
         mockMvc.perform(put("/api/v1/city/1")
                         .contentType("application/json")
+                        .header("Authorization", adminAuthHeader)
                         .content(objectMapper.writeValueAsString(cityUpdateRequest)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType("application/json"))
@@ -158,14 +179,28 @@ public class CityApiIntegrationTest {
 
         mockMvc.perform(put("/api/v1/city/0")
                         .contentType("application/json")
+                        .header("Authorization", adminAuthHeader)
                         .content(objectMapper.writeValueAsString(cityUpdateRequest)))
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    void updateCityByIdShouldReturnForbiddenWhenUserNotHaveAuthority() throws Exception {
+        String userAuthHeader = "Bearer " + jwtTokenService.generateToken(new Account("user", "", ""));
+        CityUpdateRequest cityUpdateRequest = new CityUpdateRequest("Budapest", "budapest.jpg");
+
+        mockMvc.perform(put("/api/v1/city/0")
+                        .contentType("application/json")
+                        .header("Authorization", userAuthHeader)
+                        .content(objectMapper.writeValueAsString(cityUpdateRequest)))
+                .andExpect(status().isForbidden());
     }
 
     @Test
     void updateCityByIdShouldReturnBadRequestWhenRequestBodyIsEmpty() throws Exception {
         mockMvc.perform(put("/api/v1/city/0")
                         .contentType("application/json")
+                        .header("Authorization", adminAuthHeader)
                         .content("{}"))
                 .andExpect(status().isBadRequest());
     }
@@ -174,6 +209,7 @@ public class CityApiIntegrationTest {
     void updateCityByIdShouldReturnBadRequestWhenNameIsMissing() throws Exception {
         mockMvc.perform(put("/api/v1/city/0")
                         .contentType("application/json")
+                        .header("Authorization", adminAuthHeader)
                         .content("{photo: \"budapest.jpg\"}"))
                 .andExpect(status().isBadRequest());
     }
@@ -182,6 +218,7 @@ public class CityApiIntegrationTest {
     void updateCityByIdShouldReturnBadRequestWhenPhotoIsMissing() throws Exception {
         mockMvc.perform(put("/api/v1/city/0")
                         .contentType("application/json")
+                        .header("Authorization", adminAuthHeader)
                         .content("{name: \"Budapest\"}"))
                 .andExpect(status().isBadRequest());
     }
