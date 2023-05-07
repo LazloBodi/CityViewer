@@ -39,8 +39,9 @@ public class JwtTokenService {
 
     public String generateToken(Account account) {
         return Jwts.builder()
-                .setSubject(account.getUsername())
-                .setClaims(Jwts.claims(Map.of("roles", account.getRoles())))
+                .setClaims(Map.of(
+                        "subject", account.getUsername(),
+                        "roles", account.getRoles()))
                 .setIssuedAt(new Date(clock.instant().toEpochMilli()))
                 .setExpiration(new Date(clock.instant().plus(jwtExpirationMinutes, ChronoUnit.MINUTES).toEpochMilli()))
                 .signWith(key)
@@ -48,7 +49,7 @@ public class JwtTokenService {
     }
 
     public String getUsernameFromToken(String token) {
-        return getClaimFromToken(token, Claims::getSubject);
+        return getClaimFromToken(token, claims -> claims.get("subject", String.class));
     }
 
     public Boolean validateToken(String token) {

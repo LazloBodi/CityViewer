@@ -58,12 +58,13 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
     private Optional<String> getUsername(String jwtToken) {
         try {
-            return Optional.of(jwtTokenService.getUsernameFromToken(jwtToken));
+            return Optional.ofNullable(jwtTokenService.getUsernameFromToken(jwtToken));
         } catch (IllegalArgumentException e) {
             log.error("Unable to get JWT Token");
         } catch (ExpiredJwtException e) {
             log.error("JWT Token has expired");
         }
+        log.info("Username from token is null");
         return Optional.empty();
     }
 

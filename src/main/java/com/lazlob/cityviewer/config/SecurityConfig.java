@@ -31,8 +31,8 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors().and()
                 .authorizeHttpRequests(customizer -> customizer
-                        .requestMatchers(HttpMethod.OPTIONS).permitAll()
                         .requestMatchers(toH2Console()).permitAll()
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
                         .requestMatchers("/login").permitAll()
@@ -58,10 +58,7 @@ public class SecurityConfig {
                                 .map(HttpMethod::name)
                                 .toArray(String[]::new));
                 registry.addMapping("/login")
-                        .allowedOrigins("http://localhost:4200")
-                        .allowedMethods(
-                                HttpMethod.OPTIONS.name(),
-                                HttpMethod.POST.name());
+                        .allowedOrigins("http://localhost:4200");
             }
         };
     }
