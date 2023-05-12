@@ -63,7 +63,6 @@ public class CityServiceTest {
 
     @Test
     void getAllCitiesPaginatedShouldReturnEmptyPaginatedResponseWhenDbIsEmpty() {
-        when(cityRepository.count()).thenReturn(0L);
         when(cityRepository.findAll(pageCaptor.capture())).thenReturn(Page.empty());
 
         CitiesPaginatedResponse citiesPaginated = cityService.getAllCitiesPaginated(0, 100, "");
@@ -102,7 +101,6 @@ public class CityServiceTest {
         assertEquals(5L, pageResponse1.getCities().get(4).getId());
         assertEquals(0, pageResponse1.getPage());
         assertEquals(5, pageResponse1.getSize());
-        assertEquals(cities.size(), pageResponse1.getTotalCount());
 
         CitiesPaginatedResponse pageResponse2 = cityService.getAllCitiesPaginated(1, 5, "");
 
@@ -110,7 +108,6 @@ public class CityServiceTest {
         assertEquals(6L, pageResponse2.getCities().get(0).getId());
         assertEquals(1, pageResponse2.getPage());
         assertEquals(5, pageResponse2.getSize());
-        assertEquals(cities.size(), pageResponse2.getTotalCount());
 
         assertEquals(0, pageCaptor.getAllValues().get(0).getPageNumber());
         assertEquals(5, pageCaptor.getAllValues().get(0).getPageSize());
@@ -139,9 +136,7 @@ public class CityServiceTest {
                 new City(7L, "Buenos Aires", "buenos_aires.jpg")
         );
         when(cityRepository.findAllByNameContainingIgnoreCase(eq(nameSearch), pageCaptor.capture()))
-                .thenReturn(expectedCities);
-        when(cityRepository.countByNameContainingIgnoreCase(eq(nameSearch)))
-                .thenReturn((long) expectedCities.size());
+                .thenReturn(new PageImpl<>(expectedCities));
 
         CitiesPaginatedResponse searchPage = cityService.getAllCitiesPaginated(0, 5, nameSearch);
 

@@ -10,12 +10,12 @@ import com.lazlob.cityviewer.repositories.CityRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
 import org.apache.commons.lang3.StringUtils;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.StreamSupport;
 
 @Service
 @RequiredArgsConstructor
@@ -35,11 +35,14 @@ public class CityService {
         List<City> cities;
         long totalCount;
         if (StringUtils.isNotBlank(nameSearch.trim())) {
-            cities = cityRepository.findAllByNameContainingIgnoreCase(nameSearch.trim(), PageRequest.of(page, size, Sort.by("id")));
-            totalCount = cityRepository.countByNameContainingIgnoreCase(nameSearch.trim());
+            Page<City> searchPage = cityRepository.findAllByNameContainingIgnoreCase(
+                    nameSearch.trim(), PageRequest.of(page, size, Sort.by("id")));
+            cities = searchPage.getContent();
+            totalCount = searchPage.getTotalElements();
         } else {
-            cities = StreamSupport.stream(cityRepository.findAll(PageRequest.of(page, size, Sort.by("id"))).spliterator(), false).toList();
-            totalCount = cityRepository.count();
+            Page<City> cityPage = cityRepository.findAll(PageRequest.of(page, size, Sort.by("id")));
+            cities = cityPage.getContent();
+            totalCount = cityPage.getTotalElements();
         }
 
         return CitiesPaginatedResponse.builder()
