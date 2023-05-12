@@ -47,7 +47,7 @@ public class CityController {
     public CitiesPaginatedResponse getCitiesPaginated(
             @RequestParam(value = "page", defaultValue = "0", required = false) @PositiveOrZero Integer page,
             @RequestParam(value = "size", defaultValue = "100", required = false) @Positive Integer size,
-            @RequestParam(value = "nameSearch", defaultValue = "", required = false) @Pattern(regexp = "^([a-zA-Z\\s]{0,30})$") String nameSearch) {
+            @RequestParam(value = "nameSearch", defaultValue = "", required = false) @Pattern(regexp = "^([0-9a-zA-Z\\s]{0,100})$") String nameSearch) {
         return cityService.getAllCitiesPaginated(page, size, nameSearch);
     }
 
