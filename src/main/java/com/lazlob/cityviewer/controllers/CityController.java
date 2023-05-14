@@ -13,7 +13,7 @@ import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.RequiredArgsConstructor;
 import lombok.experimental.FieldDefaults;
-import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
@@ -54,7 +54,7 @@ public class CityController {
     @ApiResponse(responseCode = "401", description = "Unauthorized - Please login first")
     @ApiResponse(responseCode = "404", description = "City not found")
     @PutMapping("/{id}")
-    @PreAuthorize("hasAuthority('ROLE_ALLOW_EDIT')")
+    @Secured("ROLE_ALLOW_EDIT")
     public CityResponse updateCityById(
             @PathVariable("id") Long id,
             @RequestBody @Valid CityUpdateRequest cityUpdateRequest) {

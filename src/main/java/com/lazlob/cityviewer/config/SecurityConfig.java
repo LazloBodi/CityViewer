@@ -20,7 +20,7 @@ import java.util.Arrays;
 import static org.springframework.boot.autoconfigure.security.servlet.PathRequest.toH2Console;
 
 @Configuration
-@EnableMethodSecurity(prePostEnabled = true)
+@EnableMethodSecurity(prePostEnabled = true, securedEnabled = true)
 public class SecurityConfig {
     @Autowired
     private JwtRequestFilter jwtRequestFilter;
