@@ -17,9 +17,11 @@ import org.springframework.security.access.annotation.Secured;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
+import static com.lazlob.cityviewer.config.AppConfig.SWAGGER_SECURITY_SCHEME_NAME;
+
 @RestController
 @RequestMapping("/api/v1/city")
-@SecurityRequirement(name = "Authorization")
+@SecurityRequirement(name = SWAGGER_SECURITY_SCHEME_NAME)
 @Validated
 @RequiredArgsConstructor
 @FieldDefaults(level = lombok.AccessLevel.PRIVATE, makeFinal = true)
