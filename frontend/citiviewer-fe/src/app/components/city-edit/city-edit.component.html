@@ -1,64 +1,68 @@
-<div *ngIf="cityForm" class="d-flex justify-content-center">
-  <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="col-10">
-    <div class="mb-3 row">
-      <label for="cityId" class="form-label col-2 col-form-label"> Id: </label>
-      <div class="col-10">
-        <input class="form-control" id="cityId" formControlName="id" readonly />
-      </div>
-    </div>
-    <div class="mb-3 row">
-      <label for="name" class="form-label col-2 col-form-label"> Name: </label>
-      <div class="col-10">
-        <input
-          class="form-control"
-          id="name"
-          formControlName="name"
-          placeholder="Name of the city"
-        />
-        <div
-          class="form-text text-danger"
-          id="nameError"
-          *ngIf="
-            cityForm.get('name')?.invalid &&
-            (cityForm.get('name')?.dirty || cityForm.get('name')?.touched)
-          "
-        >
-          Please provide a name.
+@if (cityForm) {
+  <div class="d-flex justify-content-center">
+    <form [formGroup]="cityForm" (ngSubmit)="onSubmit()" class="col-10">
+      <div class="mb-3 row">
+        <label for="cityId" class="form-label col-2 col-form-label"> Id: </label>
+        <div class="col-10">
+          <input class="form-control" id="cityId" formControlName="id" readonly />
         </div>
       </div>
-    </div>
-    <div class="mb-3 row">
-      <label for="photo" class="form-label col-2 col-form-label">
-        Photo Url:
-      </label>
-      <div class="col-10">
-        <input
-          class="form-control"
-          id="photo"
-          formControlName="photo"
-          placeholder="Url of the photo"
-        />
-        <div
-          class="form-text text-danger"
-          id="photoError"
-          *ngIf="
-            cityForm.get('photo')?.invalid &&
-            (cityForm.get('photo')?.dirty || cityForm.get('photo')?.touched)
-          "
-        >
-          Please provide a photo url.
+      <div class="mb-3 row">
+        <label for="name" class="form-label col-2 col-form-label"> Name: </label>
+        <div class="col-10">
+          <input
+            class="form-control"
+            id="name"
+            formControlName="name"
+            placeholder="Name of the city"
+            />
+            @if (
+              cityForm.get('name')?.invalid &&
+              (cityForm.get('name')?.dirty || cityForm.get('name')?.touched)
+              ) {
+              <div
+                class="form-text text-danger"
+                id="nameError"
+                >
+                Please provide a name.
+              </div>
+            }
+          </div>
         </div>
+        <div class="mb-3 row">
+          <label for="photo" class="form-label col-2 col-form-label">
+            Photo Url:
+          </label>
+          <div class="col-10">
+            <input
+              class="form-control"
+              id="photo"
+              formControlName="photo"
+              placeholder="Url of the photo"
+              />
+              @if (
+                cityForm.get('photo')?.invalid &&
+                (cityForm.get('photo')?.dirty || cityForm.get('photo')?.touched)
+                ) {
+                <div
+                  class="form-text text-danger"
+                  id="photoError"
+                  >
+                  Please provide a photo url.
+                </div>
+              }
+            </div>
+          </div>
+          <div class="d-flex justify-content-end">
+            <button
+              class="btn btn-primary"
+              type="submit"
+              id="citySaveButton"
+              [disabled]="cityForm.invalid || loading || !userCanEdit"
+              >
+              Save
+            </button>
+          </div>
+        </form>
       </div>
-    </div>
-    <div class="d-flex justify-content-end">
-      <button
-        class="btn btn-primary"
-        type="submit"
-        id="citySaveButton"
-        [disabled]="cityForm.invalid || loading || !userCanEdit"
-      >
-        Save
-      </button>
-    </div>
-  </form>
-</div>
+    }

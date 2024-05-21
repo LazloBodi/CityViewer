@@ -2,15 +2,16 @@
   <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container-fluid">
       <a href="#" class="navbar-brand" id="appName">CityViewer</a>
-      <button
-        *ngIf="loggedIn$ | async"
-        class="btn btn-outline-success"
-        type="button"
-        (click)="onLogout()"
-        id="logoutButton"
-      >
-        Log out
-      </button>
+      @if (loggedIn$ | async) {
+        <button
+          class="btn btn-outline-success"
+          type="button"
+          (click)="onLogout()"
+          id="logoutButton"
+          >
+          Log out
+        </button>
+      }
     </div>
   </nav>
 

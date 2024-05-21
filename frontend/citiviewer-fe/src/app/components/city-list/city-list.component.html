@@ -10,82 +10,87 @@
         id="nameSearch"
         class="form-control"
         aria-describedby="nameSearch"
-      />
-    </div>
-    <div class="col-auto">
-      <button
-        type="button"
-        class="btn btn-primary"
-        id="nameSearchButton"
-        (click)="onNameSearch()"
-      >
-        Go
-      </button>
-    </div>
-  </div>
-</div>
-<table class="table table-striped">
-  <thead>
-    <tr class="table-info">
-      <th>Id</th>
-      <th>Name</th>
-      <th>Photo</th>
-      <th>Actions</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr *ngFor="let city of cities" class="align-middle">
-      <td>{{ city.id }}</td>
-      <td>{{ city.name }}</td>
-      <td>
-        <img
-          src="{{ city.photo }}"
-          alt="{{ city.name }}"
-          width="100"
-          height="100"
         />
-      </td>
-      <td>
-        <a
-          *ngIf="canUserEdit"
+      </div>
+      <div class="col-auto">
+        <button
           type="button"
-          class="btn btn-outline-warning"
-          [routerLink]="'/city/' + city.id"
-          placement="end"
-          ngbTooltip="Edit"
-        >
-          <i class="bi bi-pencil big"></i>
-        </a>
-      </td>
-    </tr>
-  </tbody>
-</table>
-<div class="d-flex justify-content-center">
-  <ngb-pagination
-    [page]="page"
-    (pageChange)="onPageChange($event)"
-    [pageSize]="size"
-    [collectionSize]="totalCount"
-    [boundaryLinks]="true"
-    [maxSize]="7"
-  ></ngb-pagination>
-</div>
-
-<div class="d-flex justify-content-end mb-3">
-  <label class="form-label col-form-label col-1" for="pageSizeSelect"
-    >Page size</label
-  >
-  <div class="col-1">
-    <select
-      class="form-select form-select-sm"
-      id="pageSizeSelect"
-      aria-label="Page size select"
-      #pageSizeSelect
-      (change)="onPageSizeChange(+pageSizeSelect.value)"
-    >
-      <option *ngFor="let pageSize of pageSizes" [selected]="pageSize === size">
-        {{ pageSize }}
-      </option>
-    </select>
+          class="btn btn-primary"
+          id="nameSearchButton"
+          (click)="onNameSearch()"
+          >
+          Go
+        </button>
+      </div>
+    </div>
   </div>
-</div>
+  <table class="table table-striped">
+    <thead>
+      <tr class="table-info">
+        <th>Id</th>
+        <th>Name</th>
+        <th>Photo</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      @for (city of cities; track city) {
+        <tr class="align-middle">
+          <td>{{ city.id }}</td>
+          <td>{{ city.name }}</td>
+          <td>
+            <img
+              src="{{ city.photo }}"
+              alt="{{ city.name }}"
+              width="100"
+              height="100"
+              />
+            </td>
+            <td>
+              @if (canUserEdit) {
+                <a
+                  type="button"
+                  class="btn btn-outline-warning"
+                  [routerLink]="'/city/' + city.id"
+                  placement="end"
+                  ngbTooltip="Edit"
+                  >
+                  <i class="bi bi-pencil big"></i>
+                </a>
+              }
+            </td>
+          </tr>
+        }
+      </tbody>
+    </table>
+    <div class="d-flex justify-content-center">
+      <ngb-pagination
+        [page]="page"
+        (pageChange)="onPageChange($event)"
+        [pageSize]="size"
+        [collectionSize]="totalCount"
+        [boundaryLinks]="true"
+        [maxSize]="7"
+      ></ngb-pagination>
+    </div>
+
+    <div class="d-flex justify-content-end mb-3">
+      <label class="form-label col-form-label col-1" for="pageSizeSelect"
+        >Page size</label
+        >
+        <div class="col-1">
+          <select
+            class="form-select form-select-sm"
+            id="pageSizeSelect"
+            aria-label="Page size select"
+            #pageSizeSelect
+            (change)="onPageSizeChange(+pageSizeSelect.value)"
+            >
+            @for (pageSize of pageSizes; track pageSize) {
+              <option [selected]="pageSize === size">
+                {{ pageSize }}
+              </option>
+            }
+          </select>
+        </div>
+      </div>
