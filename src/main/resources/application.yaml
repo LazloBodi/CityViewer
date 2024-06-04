@@ -1,0 +1,19 @@
+server.port: 9876
+
+spring:
+  application:
+    name: CityViewer
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:65432/cityviewer
+    username: postgres
+    password: mysecretpassword
+    jpa.hibernate.ddl-auto: none
+
+flyway:
+  enabled: true
+  locations: resources/db/migration
+
+jwt:
+  signingSecret: super_secret_not_to_be_committed
+  expirationMinutes: 60

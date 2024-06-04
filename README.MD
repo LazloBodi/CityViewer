@@ -10,6 +10,10 @@ The application uses the H2 database, which is stored in memory.
 To run the application, you need to install Java 17 SDK and Node.js.
 
 ## Usage
+### Database
+- database requires docker runtime
+- run `docker run --name cityviewer-db -e POSTGRES_PASSWORD=mysecretpassword -d -p 65432:5432 postgres`
+- create new database in container: `cityviewer`
 
 ### Back-end
 To run the back-end, you need to run the following command in the terminal:
@@ -28,7 +32,6 @@ If all set open `http://localhost:4200/` in your browser.
 
 ## Tools:
 - Swagger is available at: `http://localhost:9876/swagger-ui/index.html`
-- H2 viewer is available at: `http://localhost:9876/h2-console`
 
 ## Test credentials
 - username: admin, password: 1234 (admin has ROLE_ALLOW_EDIT)
