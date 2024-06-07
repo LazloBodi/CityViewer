@@ -39,11 +39,11 @@ public class JwtTokenService {
 
     public String generateToken(Account account) {
         return Jwts.builder()
-                .setClaims(Map.of(
+                .claims(Map.of(
                         "subject", account.getUsername(),
                         "roles", account.getRoles()))
-                .setIssuedAt(new Date(clock.instant().toEpochMilli()))
-                .setExpiration(new Date(clock.instant().plus(jwtExpirationMinutes, ChronoUnit.MINUTES).toEpochMilli()))
+                .issuedAt(new Date(clock.instant().toEpochMilli()))
+                .expiration(new Date(clock.instant().plus(jwtExpirationMinutes, ChronoUnit.MINUTES).toEpochMilli()))
                 .signWith(key)
                 .compact();
     }
@@ -62,8 +62,8 @@ public class JwtTokenService {
     }
 
     private <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver) {
-        JwtParser jwtParser = Jwts.parserBuilder().setSigningKey(key).build();
-        final Claims claims = jwtParser.parseClaimsJws(token).getBody();
+        JwtParser jwtParser = Jwts.parser().verifyWith(key).build();
+        final Claims claims = jwtParser.parseSignedClaims(token).getPayload();
         return claimsResolver.apply(claims);
     }
 

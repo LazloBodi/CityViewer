@@ -2,9 +2,9 @@
 
 ## Description
 This is a simple application that allows you to view and edit the list of cities.
-The back-emd is written in Java 17 using the SpringBoot 3 framework.
-The front-end is written in Angular 15.
-The application uses the H2 database, which is stored in memory.
+The back-emd is written in Java 21 using the SpringBoot 3.2.6 framework.
+The front-end is written in Angular 17.
+The application uses Postgres database which can be started with Docker.
 
 ## Installation
 To run the application, you need to install Java 17 SDK and Node.js.
